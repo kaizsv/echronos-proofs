@@ -15,19 +15,16 @@ record state =
 definition gg :: "('a state_ext) bare_com"
   where
   "gg \<equiv> (COBEGIN
-  WHILE True DO 
   \<acute>x:=\<acute>x+1
-  OD
   \<parallel>
-  WHILE True DO
   \<acute>x:=\<acute>x+2
-  OD
   COEND)"
   
 lemma p:
-  "\<parallel>-\<^sub>b  \<lbrace>True\<rbrace> \<lbrace>True\<rbrace> 
+  "\<parallel>-\<^sub>b \<lbrace>True\<rbrace> \<lbrace>True\<rbrace> 
   gg
-  \<lbrace>False\<rbrace>"
-  oops
+  \<lbrace>True\<rbrace>"
+  apply (rule oghoare_bareI)
+    oops
   
 end
