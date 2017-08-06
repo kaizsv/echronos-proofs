@@ -60,14 +60,15 @@ lemma same_prog_bare:
   by auto
   
 lemmas same_prog_bare' =
-          extract_prg_merge_progI[OF same_prog_bare]
+          extract_prg_merge_progI[OF same_prog_all same_prog_bare]
   
 lemma p:
   "\<parallel>-\<^sub>b \<lbrace>True\<rbrace> \<lbrace>True\<rbrace> target  \<lbrace>True\<rbrace>"
   apply (rule oghoare_bareI)
   apply (rule exI)
   apply (rule conjI)
-    apply (rule same_prog_bare')
+   apply (rule same_prog_bare')
+  apply (simp)
     oops
   
 end
