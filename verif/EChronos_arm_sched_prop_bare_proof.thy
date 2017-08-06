@@ -76,7 +76,8 @@ lemma eChronos_scheduler_inv:
   "0 < nbUsers \<and> 0 < nbInts \<Longrightarrow>
     \<parallel>-\<^sub>b \<lbrace>\<acute>scheduler_invariant\<rbrace> \<lbrace>True\<rbrace> eChronos_sys \<lbrace>False\<rbrace>"
   apply (rule oghoare_bareI)
-  apply (rule exI, rule conjI, rule same_prog_sched_bare')
+  apply (rule exI, rule conjI)
+  apply (rule same_prog_sched_bare')
   apply simp
   apply (erule all_invs)
   done
