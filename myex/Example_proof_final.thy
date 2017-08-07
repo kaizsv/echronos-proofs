@@ -88,7 +88,7 @@ lemma same_prog_merge:
     
 lemma same_prog_all:
   "same_prog_com same_target same_target"
-  unfolding same_target_defs
+  unfolding same_target_defs same_target''_def
   by auto
     
 schematic_goal all_all[simplified]:
@@ -97,15 +97,10 @@ schematic_goal all_all[simplified]:
         ?c
         ?q"
   apply (rule oghoare_inv_cong')
-   apply (rule oghoare_composition_merge)
-  apply (erule same_target_prop_proof')
-  apply (erule all_helper_invs)
-  apply (rule will_not_fail_merge_same_prog_com)
-  apply (rule same_prog_all_invs)
-  apply (subst Collect_conj_eq_rev)+
-  apply (rule Collect_cong)
-  apply fastforce
-  oops
+   apply (rule oghoare_composition_merge
+          (*[of "\<lbrace>True\<rbrace>" "\<lbrace>True\<rbrace>" "\<lbrace>True\<rbrace>" _ "\<lbrace>True\<rbrace>"]*))
+  apply (rule same_target_prop_proof')
+    oops
   
 end
   

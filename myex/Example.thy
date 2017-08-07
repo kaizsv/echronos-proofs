@@ -55,7 +55,7 @@ lemma extract_prg_merge_progI:
 lemma same_prog_bare:
   "extract_prg same_target
      = target"
-  unfolding same_target_defs
+  unfolding same_target_defs same_target''_def
             target_defs
   by auto
   
