@@ -86,6 +86,12 @@ lemma same_prog_merge:
      apply (erule same_prog_com.elims; fastforce split: option.splits)+
   done
     
+    
+schematic_goal all_all_helper[simplified]:
+  "\<parallel>-\<^sub>i \<lbrace>True\<rbrace> ?p (?c :: 'a state_scheme com) ?q"
+  apply (rule oghoare_inv_cong')
+   apply (rule oghoare_composition_merge)
+    
 lemma same_prog_all:
   "same_prog_com same_target same_target"
   unfolding same_target_defs same_target''_def
@@ -94,12 +100,12 @@ lemma same_prog_all:
 schematic_goal all_all[simplified]:
   "\<parallel>-\<^sub>i (\<lbrace>True\<rbrace> \<inter> \<lbrace>True\<rbrace>)
         ?p
-        ?c
+        (?c::'a state_scheme com)
         ?q"
   apply (rule oghoare_inv_cong')
    apply (rule oghoare_composition_merge
-          (*[of "\<lbrace>True\<rbrace>" "\<lbrace>True\<rbrace>" "\<lbrace>True\<rbrace>" _ "\<lbrace>True\<rbrace>"]*))
-  apply (rule same_target_prop_proof')
+          [of "\<lbrace>True\<rbrace>" "\<lbrace>True\<rbrace>" "\<lbrace>True\<rbrace>" same_target "\<lbrace>True\<rbrace>"])
+     apply (rule same_target_prop_proof')
     oops
   
 end
