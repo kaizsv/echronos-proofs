@@ -25,9 +25,15 @@ theorem oghoare_inv_strengthen_assm:
 lemma same_target_prop_proof':
   "\<lbrace>True\<rbrace> \<parallel>-\<^sub>i \<lbrace>True\<rbrace> \<lbrace>True\<rbrace> same_target \<lbrace>True\<rbrace>"
   apply (subst oghoare_assumed_inv_cong)
-   prefer 2
-   apply (erule same_target_prop_proof[THEN oghoare_inv_strengthen_assm,
-                where J' = "\<lbrace>True\<rbrace>"])
+  prefer 2
+  (*** origin: erule ***)
+  apply (rule same_target_prop_proof[THEN oghoare_inv_strengthen_assm,
+          where J' = "\<lbrace>True\<rbrace>"])
+  apply (subst Collect_conj_eq_rev)
+  apply (rule Collect_cong)
+  apply (rule iffI[rotated], simp)
+  apply (clarsimp)
+  done
   
 lemma will_not_fail_merge_same_prog_com: 
   "same_prog_com cs cs' \<Longrightarrow> merge_prog_com cs cs' = Some (the (merge_prog_com cs cs'))"
@@ -91,15 +97,15 @@ schematic_goal all_all[simplified]:
         ?c
         ?q"
   apply (rule oghoare_inv_cong')
-  apply (rule oghoare_composition_merge)
-  apply (erule eChronos_arm_sched_prop_proof')
+   apply (rule oghoare_composition_merge)
+  apply (erule same_target_prop_proof')
   apply (erule all_helper_invs)
   apply (rule will_not_fail_merge_same_prog_com)
   apply (rule same_prog_all_invs)
   apply (subst Collect_conj_eq_rev)+
   apply (rule Collect_cong)
   apply fastforce
-  done
+  oops
   
 end
   
