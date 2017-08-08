@@ -37,9 +37,15 @@ lemmas Peterson_state_upd_simps = foo.foos
   
 (*-------------------------------------------------------------------------*)
 
-(* Peterson mutex invariant *)
 definition
-  "mutex_invariant state \<equiv> 
+  "mutex_invariante \<equiv> True"
+(* Peterson mutex precondition and postcondition *)
+definition
+  "mutex_precondition state \<equiv> 
+    pr1 state = 0 \<and> \<not> in1 state \<and> pr2 state = 0 \<and> \<not> in2 state"
+  
+definition
+  "mutex_postcondition state \<equiv> 
     pr1 state = 0 \<and> \<not> in1 state \<and> pr2 state = 0 \<and> \<not> in2 state"
   
 end

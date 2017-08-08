@@ -37,7 +37,8 @@ definition
       COEND)"
     
 lemmas Peterson_mutex_defs =
-  Peterson_mutex_def
+          Peterson_mutex_def
+          mutex_init_def
 thm Peterson_mutex_def[simplified Peterson_mutex_defs]
     
 end

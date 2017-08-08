@@ -47,13 +47,18 @@ lemma extract_prg_merge_progI:
                split: option.splits)
   done
     
-(*lemma same_prog_sched_bare:*)
+lemma same_prog_sched_bare:
+  "extract_prg Peterson_mutex_prop_prog
+      = Peterson_mutex"
+  unfolding Peterson_mutex_prop_prog_defs
+            Peterson_mutex_defs
+  by auto
   
 lemmas same_prog_mutex_bare' =
           extract_prg_merge_progI
   
 lemma Peterson_mutex_inv:
-  "\<parallel>-\<^sub>b \<lbrace>\<acute>mutex_invariant\<rbrace> \<lbrace>True\<rbrace> Peterson_mutex \<lbrace>False\<rbrace>"
+  "\<parallel>-\<^sub>b \<lbrace>mutex_invariante\<rbrace> \<lbrace>\<acute>mutex_precondition\<rbrace> Peterson_mutex \<lbrace>\<acute>mutex_postcondition\<rbrace>"
   apply (rule oghoare_bareI)
   apply (rule exI, rule conjI)
    apply (rule same_prog_mutex_bare')
