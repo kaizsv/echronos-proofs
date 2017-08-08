@@ -69,7 +69,7 @@ lemma p:
   apply (rule conjI)
    apply (rule same_prog_bare')
   apply (simp)
-  apply (erule all_all)
+  apply (rule all_all)
     oops
   
 end

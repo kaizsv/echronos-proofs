@@ -26,8 +26,41 @@ theorem oghoare_inv_strengthen_assm:
   unfolding oghoare_inv_def
   by (erule oghoare_strengthen_assm)
     
-(* insert *)
+lemma Peterson_mutex_prop_proof':
+  "\<lbrace>True\<rbrace>
+   \<parallel>-\<^sub>i \<lbrace>mutex_invariante\<rbrace> \<lbrace>\<acute>mutex_precondition\<rbrace>
+    Peterson_mutex_prop_prog
+    \<lbrace>\<acute>mutex_postcondition\<rbrace>"
+  apply (subst oghoare_assumed_inv_cong)
+   prefer 2
+  apply (rule Peterson_mutex_prop_proof[THEN oghoare_inv_strengthen_assm,
+        where J' = "\<lbrace>True\<rbrace>"])
+  apply simp
+    done
     
+      
+theorem oghoare_composition_mergeI:
+  " Inv' \<parallel>-\<^sub>i Inv  p  c  q  \<Longrightarrow>
+       \<parallel>-\<^sub>i Inv' p' c'  q'  \<Longrightarrow> 
+    Inv''=Inv'\<inter>Inv \<Longrightarrow>
+    p''=p\<inter>p' \<Longrightarrow>
+    q''=q\<inter>q' \<Longrightarrow>
+    merge_prog_com c c' = Some c'' \<Longrightarrow>   
+       \<parallel>-\<^sub>i Inv'' p'' c'' q''"
+ by (simp add: oghoare_composition_merge)
+
+lemma oghoare_inv_IntI: 
+  assumes Inv: "\<parallel>-\<^sub>i Inv p c q"
+  and Inv': "\<parallel>-\<^sub>i Inv' p c' q"
+  and merge: " merge_prog_com c c' = Some c''"
+  shows "\<parallel>-\<^sub>i (Inv \<inter> Inv') p c'' q"
+  apply (rule oghoare_composition_mergeI)
+       apply (rule Inv[THEN oghoare_inv_strengthen_assm])
+      apply clarsimp
+      apply (rule Inv')
+     apply blast+
+  apply (rule merge)
+  done
     
 lemma [simp]:
   "\<lbrace>True\<rbrace> = UNIV"
@@ -84,8 +117,33 @@ lemma same_prog_merge:
      apply (erule same_prog_com.elims; fastforce split: option.splits)+
   done
     
-  
+schematic_goal qq[simplified]:
+  "\<parallel>-\<^sub>i \<lbrace>True\<rbrace>
+      ?p
+      (?c::'a Peterson_state_scheme com)
+      ?q"
+  apply (rule oghoare_inv_cong')
+   apply (rule oghoare_composition_merge)
+     apply (rule Peterson_mutex_prop_proof)
+    apply (rule oghoare_inv_cong')
+     apply (rule oghoare_composition_merge)
+       apply (rule Peterson_mutex_prop_proof[simplified])
+    apply (erule Peterson_mutex_prop_proof[simplified])
     
+    
+schematic_goal all_all[simplified]:
+  "\<parallel>-\<^sub>i \<lbrace>True\<rbrace>
+      ?p
+      (?c::'a Peterson_state_scheme com)
+      ?q"
+  apply (rule oghoare_inv_cong')
+   apply (rule oghoare_composition_merge)
+    apply (rule Peterson_mutex_prop_proof[THEN oghoare_inv_strengthen_assm,
+        where J' = "\<lbrace>\<acute>J\<rbrace>" for J])
+      apply (rule oghoare_inv_cong')
+     apply (rule oghoare_inv_IntI)
+       apply (rule Peterson_mutex_prop_proof[simplified])
+    oops
     
     
 lemma same_prog_all:
@@ -93,6 +151,16 @@ lemma same_prog_all:
       Peterson_mutex_prop_prog 
       Peterson_mutex_prop_prog"
   unfolding Peterson_mutex_prop_prog_defs
+  apply auto sorry
+    
+schematic_goal all_prog[simplified]:
+  "\<parallel>-\<^sub>i (\<lbrace>mutex_invariante\<rbrace> \<inter> \<lbrace>True\<rbrace>)
+       ?p
+       (?c:: 'a Peterson_state_scheme com)
+       ?q"
+  apply (rule oghoare_inv_cong')
+   apply (rule oghoare_composition_merge)
+    apply (rule Peterson_mutex_prop_proof')
     oops
   
   

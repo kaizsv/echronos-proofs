@@ -38,8 +38,17 @@ where
   
   
 lemmas Peterson_mutex_prop_prog_defs =
+                Peterson_mutex_base_defs
                 Peterson_mutex_prop_prog_def
-                mutex_init_def
+                
+lemma Peterson_mutex_prop_proof:
+  "\<lbrace>True\<rbrace>
+   \<parallel>-\<^sub>i \<lbrace>mutex_invariante\<rbrace> \<lbrace>\<acute>mutex_precondition\<rbrace>
+    Peterson_mutex_prop_prog
+    \<lbrace>\<acute>mutex_postcondition\<rbrace>"
+  unfolding Peterson_mutex_prop_prog_defs
+  unfolding oghoare_inv_def
+    sorry
   
   
   

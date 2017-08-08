@@ -22,6 +22,10 @@ theorem oghoare_inv_strengthen_assm:
   unfolding oghoare_inv_def
   by (erule oghoare_strengthen_assm)
     
+lemma [simp]:
+  "\<lbrace>True\<rbrace> = UNIV"
+  by simp
+    
 lemma same_target_prop_proof':
   "\<lbrace>True\<rbrace> \<parallel>-\<^sub>i \<lbrace>True\<rbrace> \<lbrace>True\<rbrace> same_target \<lbrace>True\<rbrace>"
   apply (subst oghoare_assumed_inv_cong)
@@ -182,10 +186,10 @@ schematic_goal qq'[simplified]:
     apply (rule oghoare_inv_cong')
      apply (rule oghoare_composition_merge)
     
-       apply (rule same_target_prop_proof)
+       (*apply (rule same_target_prop_proof)*)
     
     
-    (*
+    
        apply (rule same_target_prop_proof[simplified])
     apply (rule same_target_prop_proof[simplified])+
      apply (rule will_not_fail_merge_same_prog_com)
@@ -199,7 +203,7 @@ schematic_goal qq'[simplified]:
     apply (subst Collect_conj_eq_rev)+
   apply (rule Collect_cong)
   apply (fastforce )
-*)
+
     done
 
     
@@ -208,7 +212,7 @@ schematic_goal qq[simplified]:
   "\<parallel>-\<^sub>i \<lbrace>True\<rbrace> ?p (?c :: 'a state_scheme com) ?q"
   apply (rule oghoare_inv_cong')
    apply (rule oghoare_composition_merge)
-     apply (rule same_target_prop_proof)
+     apply (rule same_target_prop_proof[simplified])
     apply (rule qq')
    apply (rule will_not_fail_merge_same_prog_com)
     apply (simp add: merge_prog_com_refl uses_all_pres_same_target)
@@ -252,10 +256,13 @@ schematic_goal all_all[simplified]:
         ?q"
   apply (rule oghoare_inv_cong')
    apply (rule oghoare_composition_merge)
-     apply (rule same_target_prop_proof')
+     apply (rule same_target_prop_proof'[simplified])
     apply (rule all_all_helper)
-    
-    oops
+   apply (rule will_not_fail_merge_same_prog_com)
+   apply (simp add: merge_prog_com_refl uses_all_pres_same_target)
+   apply (rule same_prog_all)
+  apply fastforce
+    done
   
 end
   

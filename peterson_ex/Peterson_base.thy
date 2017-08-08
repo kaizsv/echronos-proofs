@@ -20,5 +20,8 @@ where
     \<acute>pr2 := 0,,
     \<acute>in2 := False"
   
+lemmas Peterson_mutex_base_defs =
+  mutex_init_def
+  
 end
   

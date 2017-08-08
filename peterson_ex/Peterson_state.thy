@@ -12,10 +12,10 @@ record Peterson_state =
   
 locale foo
   =
-  fixes Red :: "'a Peterson_state_scheme"
+  fixes Rec :: "'a Peterson_state_scheme"
 begin
   
-lemmas r_surj = Peterson_state.surjective[of Red,symmetric]
+lemmas r_surj = Peterson_state.surjective[of Rec,symmetric]
   
 lemmas foo =
   Peterson_state.update_convs[of "\<lambda>_. X" for X, @ (schematic) \<open>subst (asm) r_surj\<close>,symmetric]
