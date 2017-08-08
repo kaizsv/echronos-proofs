@@ -57,13 +57,13 @@ lemma same_prog_sched_bare:
 lemmas same_prog_mutex_bare' =
           extract_prg_merge_progI[OF same_prog_all same_prog_sched_bare]
   
-lemma Peterson_mutex_inv:
+lemma Peterson_mutex_inv:        
   "\<parallel>-\<^sub>b \<lbrace>mutex_invariante\<rbrace> \<lbrace>\<acute>mutex_precondition\<rbrace> Peterson_mutex \<lbrace>\<acute>mutex_postcondition\<rbrace>"
   apply (rule oghoare_bareI)
   apply (rule exI, rule conjI)
    apply (rule same_prog_mutex_bare')
   apply (simp)
-    oops
+   oops
     
     
   

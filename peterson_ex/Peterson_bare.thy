@@ -23,7 +23,7 @@ definition
       DO
       \<langle>\<acute>in1 := True,, \<acute>pr1 := 1\<rangle>;;
       \<langle>\<acute>hold := 1,, \<acute>pr1 := 2\<rangle>;;
-      AWAIT (\<not>\<acute>in2 \<or> \<not>(\<acute>hold=1)) THEN \<acute>pr1 := 3 END;;
+      AWAIT (\<not>\<acute>in2 \<or> \<acute>hold \<noteq> 1) THEN \<acute>pr1 := 3 END;;
       \<langle>\<acute>in1 := False,, \<acute>pr1 := 0\<rangle>
       OD
       \<parallel>
@@ -31,7 +31,7 @@ definition
       DO
       \<langle>\<acute>in2 := True,, \<acute>pr2 := 1\<rangle>;;
       \<langle>\<acute>hold := 2,, \<acute>pr2 := 2\<rangle>;;
-      AWAIT (\<not>\<acute>in1 \<or> \<not>(\<acute>hold=2)) THEN \<acute>pr2 := 3 END;;
+      AWAIT (\<not>\<acute>in1 \<or> \<acute>hold \<noteq> 2) THEN \<acute>pr2 := 3 END;;
       \<langle>\<acute>in2 := False,, \<acute>pr2 := 0\<rangle>
       OD
       COEND)"

@@ -48,6 +48,9 @@ lemma Peterson_mutex_prop_proof:
     \<lbrace>\<acute>mutex_postcondition\<rbrace>"
   unfolding Peterson_mutex_prop_prog_defs
   unfolding oghoare_inv_def
+  apply (simp add: add_inv_aux_def o_def
+              del: last.simps butlast.simps (*upt_Suc*))
+  apply oghoare
     sorry
   
   

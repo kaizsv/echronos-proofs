@@ -2,6 +2,7 @@ theory Peterson_proof_final
   imports
     "../verif/OG_Composition"
     Peterson_proof
+    Peterson_proof_t
 begin
   
 lemma oghoare_assumed_inv_cong:
@@ -128,7 +129,7 @@ schematic_goal qq[simplified]:
     apply (rule oghoare_inv_cong')
      apply (rule oghoare_composition_merge)
        apply (rule Peterson_mutex_prop_proof[simplified])
-    apply (erule Peterson_mutex_prop_proof[simplified])
+    oops
     
     
 schematic_goal all_all[simplified]:
@@ -143,14 +144,14 @@ schematic_goal all_all[simplified]:
       apply (rule oghoare_inv_cong')
      apply (rule oghoare_inv_IntI)
        apply (rule Peterson_mutex_prop_proof[simplified])
-    oops
-    
+  oops
     
 lemma same_prog_all:
   "same_prog_com 
       Peterson_mutex_prop_prog 
-      Peterson_mutex_prop_prog"
+      Peterson_mutex_prop_prog_t"
   unfolding Peterson_mutex_prop_prog_defs
+            Peterson_mutex_prop_prog_t_defs
   apply auto sorry
     
 schematic_goal all_prog[simplified]:
