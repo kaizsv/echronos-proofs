@@ -7,6 +7,18 @@ imports
   "../lib/subgoal_focus/Subgoal_Methods"
   "../lib/Eisbach_Methods"
 begin
+  
+  lemma
+  last_single: 
+  "last [x] = x"
+    by simp
+lemmas subset_eqI = subset_eq[THEN iffD2]
+  lemma
+  union_negI_drop: 
+  "x \<in> A \<Longrightarrow> x \<in> A \<union> -B"
+    by blast
+lemma CollectNotD: "a \<notin> {x. P x} \<Longrightarrow> \<not> P a"
+  by simp
 
 ML \<open>
 fun timed_tac i ctxt st seq =
@@ -44,28 +56,14 @@ fun FORWARD tac ctxt = tac THEN_ALL_NEW_BUT_1 (SOLVED' (assume_tac ctxt))
 fun TRY_EVERY_FORWARD' ctxt thms i =
   TRY_EVERY' (map (fn thm => FORWARD (forward_tac ctxt [thm]) ctxt) thms) i
 \<close>
-  
-lemma last_single:
-  "last [x] = x"
-  by simp
-    
-lemmas subset_eqI = subset_eq[THEN iffD2]
-  
-lemma
-  union_negI_drop: 
-  "x \<in> A \<Longrightarrow> x \<in> A \<union> -B"
-  by blast
-    
-lemma CollectNotD: "a \<notin> {x. P x} \<Longrightarrow> \<not> P a"
-  by simp
 
 ML \<open>
 fun set_to_logic ctxt i =
   let val simp_ctxt = ((clear_simpset ctxt)
           addsimps @{thms state_upd_simps HOL.simp_thms HOL.all_simps HOL.ex_simps
                           option.inject pre.simps snd_conv option.sel last_single
-                          neq_Nil_conv 
-                          (*U_simps svc\<^sub>a_commute handle_events_empty*)
+                           neq_Nil_conv 
+                          
                           })
                   |> Splitter.add_split @{thm if_split_asm}
                   |> Splitter.add_split @{thm if_split}
@@ -81,13 +79,6 @@ fun set_to_logic ctxt i =
          ORELSE' CHANGED o safe_asm_full_simp_tac simp_ctxt
          ORELSE' CHANGED o Classical.clarify_tac (Clasimp.addSss simp_ctxt)) i)
   end
-
-(*fun svc_commute ctxt =
-  ((TRY' o REPEAT_ALL_NEW) ((EqSubst.eqsubst_tac ctxt [0] @{thms svc\<^sub>a_commute})
-                ORELSE' (EqSubst.eqsubst_asm_tac ctxt [0] @{thms svc\<^sub>a_commute})))
-  THEN'
-  ((TRY' o REPEAT_ALL_NEW) ((EqSubst.eqsubst_tac ctxt [0] @{thms svc\<^sub>s_commute})
-                ORELSE' (EqSubst.eqsubst_asm_tac ctxt [0] @{thms svc\<^sub>s_commute})))*)
 \<close>
 
 end
