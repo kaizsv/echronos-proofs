@@ -48,5 +48,10 @@ definition
   "mutex_postcondition state \<equiv> 
     pr1 state = 0 \<and> \<not> in1 state \<and> pr2 state = 0 \<and> \<not> in2 state"
   
+lemmas inv_defs = 
+          mutex_invariante_def
+          mutex_precondition_def
+          mutex_postcondition_def
+  
 end
   

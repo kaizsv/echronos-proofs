@@ -75,6 +75,66 @@ lemma will_not_fail_merge_same_prog_com:
   apply simp
   done
     
+lemma same_prog_ann_com_refl:
+  "uses_all_pres c \<Longrightarrow> same_prog_ann_com c c"
+  by (induct c) auto
+
+lemma same_prog_list_aux_refl_helper:
+  "\<forall>i<length (a # Ts).
+           (\<exists>y. OG_Tran.com ((a # Ts) ! i) = Some y) \<longrightarrow>
+           uses_all_pres (the (OG_Tran.com ((a # Ts) ! i))) \<Longrightarrow>
+   \<forall>i<length Ts.
+           (\<exists>y. OG_Tran.com (Ts ! i) = Some y) \<longrightarrow>
+           uses_all_pres (the (OG_Tran.com (Ts ! i)))"
+  by auto
+
+lemma same_prog_list_aux_refl:
+  "(\<forall>i<length Ts. (\<exists>y. OG_Tran.com(Ts ! i) = Some y) \<longrightarrow> uses_all_pres (the(OG_Tran.com(Ts ! i))))
+    \<Longrightarrow> same_prog_list_aux Ts Ts"
+  apply (simp add: same_prog_list_aux_def same_prog_aux_def)
+  apply (induct Ts, simp)
+  apply (simp add: same_prog_list_aux_refl_helper)
+  apply (drule_tac x=0 in spec)
+  apply (clarsimp split: option.splits)
+  apply (clarsimp simp: same_prog_ann_com_refl split: option.splits)
+  done
+
+lemma same_prog_com_refl:
+  "uses_all_pres' c \<Longrightarrow> same_prog_com c c"
+  apply (induct c)
+  apply (auto simp: same_prog_list_aux_refl)
+  done
+
+lemma merge_ann_com_refl:
+  "uses_all_pres c \<Longrightarrow> merge_ann_com c c = Some c"
+  apply (induct c)
+  by auto
+
+lemma merge_prog_list_aux_refl:
+  "\<forall>i<length Ts.
+              (\<exists>y. OG_Tran.com (Ts ! i) = Some y) \<longrightarrow>
+              uses_all_pres (the (OG_Tran.com (Ts ! i)))
+    \<Longrightarrow> merge_prog_list_aux Ts Ts = Some Ts"
+  apply (simp add: merge_prog_list_aux_def merge_prog_aux_def)
+  apply (induct Ts, simp)
+  apply (simp add: same_prog_list_aux_refl_helper)
+  apply (drule_tac x=0 in spec)
+  apply (clarsimp split: option.splits)
+  apply (auto simp: merge_ann_com_refl split: option.splits)
+  done
+
+lemma merge_prog_com_refl:
+  "uses_all_pres' c \<Longrightarrow> merge_prog_com c c = Some c"
+  apply (induct c)
+  apply (auto simp: merge_prog_list_aux_refl split: option.splits)
+  done
+    
+lemma same_prog_aux_add_await[intro!]:
+  "same_prog_ann_com c c'\<Longrightarrow>
+  same_prog_aux (Some c, aa)
+                (Some c', aa')"
+  by (auto simp: same_prog_aux_def)
+    
 lemma same_prog_merge''':
   "same_prog_ann_com p1 p2 \<Longrightarrow>
    same_prog_ann_com p2 p3 \<Longrightarrow>

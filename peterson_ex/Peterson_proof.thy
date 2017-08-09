@@ -36,6 +36,7 @@ where
     \<lbrace>\<acute>pr2 = 0 \<and> \<not>\<acute>in2\<rbrace>
   COEND))"
   
+declare [[simp_trace_new mode=normal ]]
   
 lemmas Peterson_mutex_prop_prog_defs =
                 Peterson_mutex_base_defs

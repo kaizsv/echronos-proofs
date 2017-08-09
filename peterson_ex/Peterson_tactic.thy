@@ -45,8 +45,7 @@ fun set_to_logic ctxt i =
   let val simp_ctxt = ((clear_simpset ctxt)
           addsimps @{thms Peterson_state_upd_simps HOL.simp_thms HOL.all_simps HOL.ex_simps
                           option.inject pre.simps snd_conv option.sel last_single
-                          neq_Nil_conv svc\<^sub>a_commute
-                          })
+                          neq_Nil_conv})
                   |> Splitter.add_split @{thm if_split_asm}
                   |> Splitter.add_split @{thm if_split}
   in DETERM (REPEAT_ALL_NEW (resolve_tac ctxt
@@ -60,15 +59,7 @@ fun set_to_logic ctxt i =
          ORELSE' DETERM o eresolve_tac ctxt @{thms IntE conjE exE insertE}
          ORELSE' CHANGED o safe_asm_full_simp_tac simp_ctxt
          ORELSE' CHANGED o Classical.clarify_tac (Clasimp.addSss simp_ctxt)) i)
-  end
-
-fun svc_commute ctxt =
-  ((TRY' o REPEAT_ALL_NEW) ((EqSubst.eqsubst_tac ctxt [0] @{thms svc\<^sub>a_commute})
-                ORELSE' (EqSubst.eqsubst_asm_tac ctxt [0] @{thms svc\<^sub>a_commute})))
-  THEN'
-  ((TRY' o REPEAT_ALL_NEW) ((EqSubst.eqsubst_tac ctxt [0] @{thms svc\<^sub>s_commute})
-                ORELSE' (EqSubst.eqsubst_asm_tac ctxt [0] @{thms svc\<^sub>s_commute})))
-\<close>
+  end\<close>
   
   
 end
